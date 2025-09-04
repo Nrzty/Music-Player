@@ -20,4 +20,24 @@ public class Song {
     public String getSongTitle(){
         return this.title;
     }
+
+    public void setTitle(String title){
+        this.title = title;
+    }
+
+    public void setArtist(String artist){
+        this.artist = artist;
+    }
+
+    public void setAlbum(String album){
+        this.album = album;
+    }
+
+    public void setMusicalGenre(String musicalGenre){
+        this.musicalGenre = musicalGenre;
+    }
+
+    public void setDuration(int duration){
+        this.duration = duration;
+    }
 }
