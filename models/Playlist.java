@@ -4,7 +4,16 @@ import java.util.ArrayList;
 
 public class Playlist {
 
+    private String playlistName;
     ArrayList<Song> playlist = new ArrayList<Song>();
+
+    public Playlist(String playlistName){
+        this.playlistName = playlistName;
+    }
+
+    public String getPlaylistName(){
+        return this.playlistName;
+    }
 
     public void isSongNull(Song song) throws Exception {
         if (song == null) {

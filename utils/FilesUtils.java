@@ -9,6 +9,34 @@ import java.util.stream.Stream;
 
 public class FilesUtils {
 
+    private String playlistFolderPath = "src/musicPlayer/songs/";
+
+    public void createPlaylistFolderIfNotExists(String playlistName){
+        Path path = Paths.get(playlistFolderPath);
+        Path folderPath = path.resolve(playlistName);
+
+        if (!Files.exists(folderPath)){
+            try {
+                Files.createDirectories(folderPath);
+            } catch (Exception e){
+                System.err.println("Error creating playlist" + playlistName + "folder on: " + playlistFolderPath);
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println(playlistName + " Playlist" + " already exists!");
+        }
+    }
+
+    public List<Path> readAllPlaylistFolders(){
+        try(Stream<Path> paths = Files.walk(Paths.get(playlistFolderPath))){
+            return paths
+                .filter(Files::isDirectory).map(Path::getFileName).collect(Collectors.toList());
+        } catch (Exception e){
+            System.err.println("Error searching folders on " + playlistFolderPath);
+            return List.of();
+        }
+    }
+
     public List<Path> readAllMP3FilesOnAFolder(String folderPath){
         try(Stream<Path> paths = Files.walk(Paths.get(folderPath))){
             return paths

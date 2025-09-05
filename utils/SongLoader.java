@@ -1,5 +1,6 @@
 package musicPlayer.utils;
 
+import musicPlayer.models.Playlist;
 import musicPlayer.models.Song;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.mp3.MP3AudioHeader;
@@ -19,7 +20,7 @@ public class SongLoader {
         this.filesUtils = new FilesUtils();
     }
 
-    public List<Song> readMP3File(){
+    public List<Song> loadSongsFound(){
         List<Path> mp3Files = filesUtils.readAllMP3FilesOnAFolder(filePath);
 
         List<Song> songsFound = new ArrayList<>();

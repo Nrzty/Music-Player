@@ -21,23 +21,14 @@ public class Song {
         return this.title;
     }
 
-    public void setTitle(String title){
-        this.title = title;
-    }
-
-    public void setArtist(String artist){
-        this.artist = artist;
-    }
-
-    public void setAlbum(String album){
-        this.album = album;
-    }
-
-    public void setMusicalGenre(String musicalGenre){
-        this.musicalGenre = musicalGenre;
-    }
-
-    public void setDuration(int duration){
-        this.duration = duration;
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Title: ").append(title).append("\n");
+        stringBuilder.append("Artist: ").append(artist).append("\n");
+        stringBuilder.append("Album: ").append(album).append("\n");
+        stringBuilder.append("Genre: ").append(musicalGenre).append("\n");
+        stringBuilder.append("Duration: ").append(duration / 60).append(":").append(duration % 60).append(" minutes").append("\n");
+        return stringBuilder.toString();
     }
 }
