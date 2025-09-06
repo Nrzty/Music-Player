@@ -34,6 +34,21 @@ public class Library {
         allPlaylists.remove(playListName);
     }
 
+    public void showAllSongsInAPlaylist(String playlistName){
+        if (playlistName == null || playlistName.isEmpty()){
+            System.err.println("Playlist name is null or empty");
+            return;
+        }
+
+        if (!allPlaylists.containsKey(playlistName)){
+            System.err.println("Playlist not found in library");
+            return;
+        }
+
+        Playlist playlist = allPlaylists.get(playlistName);
+        playlist.showAllSongs();
+    }
+
     public void showAllPlaylistsInLibrary(){
         if (allPlaylists.isEmpty()){
             System.out.println("No playlists in library");

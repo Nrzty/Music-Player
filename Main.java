@@ -1,21 +1,18 @@
 package musicPlayer;
 
+import musicPlayer.models.Library;
 import musicPlayer.models.Song;
 import musicPlayer.ui.ConsoleUI;
 import musicPlayer.utils.FilesUtils;
-import musicPlayer.utils.SongLoader;
+import musicPlayer.utils.LibraryLoader;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args){
-        SongLoader songLoader = new SongLoader();
+    public static void main(String[] args) throws Exception {
+        LibraryLoader libraryLoader = new LibraryLoader();
 
-        List<Song> allSongs = songLoader.loadSongsFound();
-
-        FilesUtils filesUtils = new FilesUtils();
-        allSongs.stream().forEach(System.out::println);
-
-        // ConsoleUI consoleUI = new ConsoleUI();
-        // consoleUI.startProgram();
+        Library library = libraryLoader.loadAllPlaylistsFound();
+        ConsoleUI consoleUI = new ConsoleUI(library);
+        consoleUI.startProgram();
     }
 }

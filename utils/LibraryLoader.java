@@ -1,5 +1,6 @@
 package musicPlayer.utils;
 
+import musicPlayer.models.Library;
 import musicPlayer.models.Playlist;
 import musicPlayer.models.Song;
 import org.jaudiotagger.audio.AudioFileIO;
@@ -10,18 +11,40 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SongLoader {
+public class LibraryLoader {
 
     String filePath = "src/musicPlayer/songs/";
 
     private FilesUtils filesUtils;
 
-    public SongLoader(){
+    public LibraryLoader(){
         this.filesUtils = new FilesUtils();
     }
 
-    public List<Song> loadSongsFound(){
-        List<Path> mp3Files = filesUtils.readAllMP3FilesOnAFolder(filePath);
+    public Library loadAllPlaylistsFound() throws Exception {
+        Library library = new Library();
+        List<Path> playlistFolders = filesUtils.readAllPlaylistFolders();
+
+        for (Path playlistFolder : playlistFolders) {
+            String playlistName = playlistFolder.getFileName().toString();
+            Playlist actualPlaylist = new Playlist(playlistName);
+
+            List<Song> songs = this.loadSongsFound(playlistFolder.toString());
+
+            for (Song song : songs){
+                actualPlaylist.addSong(song);
+            }
+            library.addPlaylistIntoLibrary(actualPlaylist);
+        }
+        return library;
+    }
+
+    public List<Song> showAllSongsFound(String folderPath){
+        return this.loadSongsFound(folderPath);
+    }
+
+    public List<Song> loadSongsFound(String folderPath){
+        List<Path> mp3Files = filesUtils.readAllMP3FilesOnAFolder(folderPath);
 
         List<Song> songsFound = new ArrayList<>();
 

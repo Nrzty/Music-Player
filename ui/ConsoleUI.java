@@ -1,13 +1,16 @@
 package musicPlayer.ui;
 
+import musicPlayer.models.Library;
 import musicPlayer.utils.UserInputs;
 
 public class ConsoleUI {
 
-    UserInputs userInputs;
+    private UserInputs userInputs;
+    private Library library;
 
-    public ConsoleUI(){
+    public ConsoleUI(Library library){
         this.userInputs = new UserInputs();
+        this.library = library;
     }
 
     public void displayOptions(){
@@ -20,9 +23,9 @@ public class ConsoleUI {
                         \\_\\ \\/ |_|  /___|\\__|\\__, | /___,' \\___| \\_/ \s
                                              |___/                   \s
                         --------------------------------------------
-                        1. Add Song
-                        2. Remove Song
-                        3. Show All Songs
+                        1. List all playlists
+                        2. Remove a specified playlist
+                        3. Select a playlist
                         4. Exit
                         --------------------------------------------
                         """
@@ -41,13 +44,19 @@ public class ConsoleUI {
             } else {
                 switch (inputOption){
                     case "1":
-                        // add song
+                        this.library.showAllPlaylistsInLibrary();
                         break;
                     case "2":
-                        // remove song
+                        String playlistNameForRemoval = userInputs.getStringInput("Enter the name of the playlist to remove: ");
+                        System.out.println("All playlists found for removal: ");
+                        this.library.showAllPlaylistsInLibrary();
+                        this.library.removePlaylistFromLibrary(playlistNameForRemoval);
+                        System.out.println("Playlist " + playlistNameForRemoval + " removed from library");
                         break;
                     case "3":
-                        // show all songs
+                        String playlistNameForListAllSongs = userInputs.getStringInput("Enter the name of the playlist to list his songs: ");
+                        System.out.println("All songs found in " + playlistNameForListAllSongs + " playlist: ");
+                        this.library.showAllSongsInAPlaylist(playlistNameForListAllSongs);
                         break;
                     default:
                         System.out.println("Invalid option");

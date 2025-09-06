@@ -28,9 +28,11 @@ public class FilesUtils {
     }
 
     public List<Path> readAllPlaylistFolders(){
-        try(Stream<Path> paths = Files.walk(Paths.get(playlistFolderPath))){
+        try(Stream<Path> paths = Files.walk(Path.of(playlistFolderPath))){
             return paths
-                .filter(Files::isDirectory).map(Path::getFileName).collect(Collectors.toList());
+                    .filter(Files::isDirectory)
+                    .filter(name -> name != null && !name.toString().equals("songs"))
+                    .collect(Collectors.toList());
         } catch (Exception e){
             System.err.println("Error searching folders on " + playlistFolderPath);
             return List.of();
