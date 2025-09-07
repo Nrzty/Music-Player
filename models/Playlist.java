@@ -1,6 +1,7 @@
 package musicPlayer.models;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Playlist {
 
@@ -37,9 +38,7 @@ public class Playlist {
         }
     }
 
-    public void showAllSongs(){
-        for (Song song : playlist){
-            System.out.println(song.getSongTitle());
-        }
+    public ArrayList<Song> showAllSongs(){
+        return this.playlist;
     }
 }

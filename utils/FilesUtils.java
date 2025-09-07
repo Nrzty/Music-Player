@@ -9,12 +9,42 @@ import java.util.stream.Stream;
 
 public class FilesUtils {
 
-    private String playlistFolderPath = "src/musicPlayer/songs/";
+    private final String playlistFolderPath;
+
+    public FilesUtils(){
+        this.playlistFolderPath = loadPlaylistPathFromConfig();
+        createBaseDirectoryIfNotExists();
+    }
+    
+    private String loadPlaylistPathFromConfig(){
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream("config.properties")) {
+            Properties prop = new Properties();
+            prop.load(input);
+            String rawPath = prop.getProperty("playlist.base.path");
+        
+            return rawPath.replace("${user.home}", System.getProperty("user.home"))
+        } catch (Exception e) {
+            System.err.println("Erro loading config.properties.");
+            return System.getProperty("user.home") + "/MusicPlayerData/songs/";
+        }
+    }
+
+    private void createBaseDirectoryIfNotExists(){
+        Path basePath = Paths.get(playlistFolderPath);
+        if (!Files.exists(basePath)) {
+            try {
+                Files.createDirectories(basePath);
+                System.out.println("Base folder created on: " + playlistFolderPath);
+            } catch (Exception e) {
+                System.err.println("Error creating playlists base folder");
+                e.printStrackTrace();
+            }
+        }
+    }
 
     public void createPlaylistFolderIfNotExists(String playlistName){
-        Path path = Paths.get(playlistFolderPath);
-        Path folderPath = path.resolve(playlistName);
-
+        Path folderPath = Paths.get(playlistFolderPath, playlistName);
+        
         if (!Files.exists(folderPath)){
             try {
                 Files.createDirectories(folderPath);
@@ -28,13 +58,14 @@ public class FilesUtils {
     }
 
     public List<Path> readAllPlaylistFolders(){
-        try(Stream<Path> paths = Files.walk(Path.of(playlistFolderPath))){
+        try(Stream<Path> paths = Files.walk(Path.of(playlistFolderPath), 1)){
             return paths
                     .filter(Files::isDirectory)
-                    .filter(name -> name != null && !name.toString().equals("songs"))
+                    .filter(path -> !path.equals(Paths.get(playlistFolderPath)))
                     .collect(Collectors.toList());
         } catch (Exception e){
             System.err.println("Error searching folders on " + playlistFolderPath);
+            e.printStrackTrace();
             return List.of();
         }
     }

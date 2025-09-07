@@ -1,6 +1,8 @@
 package musicPlayer.models;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 public class Library {
 
@@ -49,14 +51,24 @@ public class Library {
         playlist.showAllSongs();
     }
 
-    public void showAllPlaylistsInLibrary(){
-        if (allPlaylists.isEmpty()){
-            System.out.println("No playlists in library");
-            return;
+    public ArrayList<Song> getAllSongsInAPlaylist(String playlistName){
+        if (playlistName == null || playlistName.isEmpty()){
+            throw new RuntimeException("Playlist name is null or empty");
         }
 
-        for (String playlistName : allPlaylists.keySet()){
-            System.out.println(playlistName);
+        if (!allPlaylists.containsKey(playlistName)){
+            throw new RuntimeException("Playlist not found in library");
         }
+
+        Playlist playlist = allPlaylists.get(playlistName);
+        return playlist.showAllSongs();
+    }
+
+    public Set<String> getAllPlaylistsInLibrary(){
+        if (allPlaylists.isEmpty()){
+            throw new RuntimeException("No playlists in library");
+        }
+
+        return allPlaylists.keySet();
     }
 }

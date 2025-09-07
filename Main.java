@@ -13,6 +13,6 @@ public class Main {
 
         Library library = libraryLoader.loadAllPlaylistsFound();
         ConsoleUI consoleUI = new ConsoleUI(library);
-        consoleUI.startProgram();
+        consoleUI.startInicialMenu();
     }
 }
