@@ -6,6 +6,11 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+import java.lang.Exception;
 
 public class FilesUtils {
 
@@ -22,9 +27,9 @@ public class FilesUtils {
             prop.load(input);
             String rawPath = prop.getProperty("playlist.base.path");
         
-            return rawPath.replace("${user.home}", System.getProperty("user.home"))
+            return rawPath.replace("${user.home}", System.getProperty("user.home"));
         } catch (Exception e) {
-            System.err.println("Erro loading config.properties.");
+            System.err.println("Erro loading config.properties");
             return System.getProperty("user.home") + "/MusicPlayerData/songs/";
         }
     }
@@ -37,7 +42,7 @@ public class FilesUtils {
                 System.out.println("Base folder created on: " + playlistFolderPath);
             } catch (Exception e) {
                 System.err.println("Error creating playlists base folder");
-                e.printStrackTrace();
+                e.printStackTrace();
             }
         }
     }
@@ -65,7 +70,7 @@ public class FilesUtils {
                     .collect(Collectors.toList());
         } catch (Exception e){
             System.err.println("Error searching folders on " + playlistFolderPath);
-            e.printStrackTrace();
+            e.printStackTrace();
             return List.of();
         }
     }
@@ -73,6 +78,7 @@ public class FilesUtils {
     public List<Path> readAllMP3FilesOnAFolder(String folderPath){
         try(Stream<Path> paths = Files.walk(Paths.get(folderPath))){
             return paths
+                    .peek(path -> System.out.println("Encontrado: " + path))
                     .filter(Files::isRegularFile)
                     .filter(path -> path.toString().toLowerCase().endsWith(".mp3"))
                     .collect(Collectors.toList());
