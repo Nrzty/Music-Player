@@ -6,11 +6,12 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.File;
 import java.io.InputStream;
 import java.util.Properties;
 import java.lang.Exception;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class FilesUtils {
 
@@ -20,7 +21,18 @@ public class FilesUtils {
         this.playlistFolderPath = loadPlaylistPathFromConfig();
         createBaseDirectoryIfNotExists();
     }
-    
+
+    public String convertAStringToURI(String textToConvert){
+        if (textToConvert == null) {
+            System.err.println("String to convert cannot be null.");
+            return null;
+        }
+        
+        File newFilePath = new File(textToConvert);
+        
+        return newFilePath.toURI().toString();
+    }
+
     private String loadPlaylistPathFromConfig(){
         try (InputStream input = getClass().getClassLoader().getResourceAsStream("config.properties")) {
             Properties prop = new Properties();

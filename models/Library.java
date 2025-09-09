@@ -71,4 +71,17 @@ public class Library {
 
         return allPlaylists.keySet();
     }
+
+    public Playlist getPlaylistByName(String playListName){
+        if (playListName == null || playListName.isEmpty()) {
+            throw new RuntimeException("Playlist name is null or empty");
+        }
+
+        if (!allPlaylists.containsKey(playListName)) {
+            throw new RuntimeException("Playlist not found in library");
+        }
+
+        Playlist playlist = allPlaylists.get(playListName);
+        return playlist;
+    }
 }

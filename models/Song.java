@@ -9,16 +9,23 @@ public class Song {
 
     int duration;
 
-    public Song(String title, String artist, String album, String musicalGenre, int duration) {
+    private String filePath;
+
+    public Song(String title, String artist, String album, String musicalGenre, int duration, String filePath) {
         this.title = title;
         this.artist = artist;
         this.album = album;
         this.musicalGenre = musicalGenre;
         this.duration = duration;
+        this.filePath = filePath;
     }
 
     public String getSongTitle(){
         return this.title;
+    }
+
+    public String getFilePath(){
+        return this.filePath;
     }
 
     @Override

@@ -6,10 +6,20 @@ import java.util.List;
 public class Playlist {
 
     private String playlistName;
-    ArrayList<Song> playlist = new ArrayList<Song>();
+    public ArrayList<Song> playlist = new ArrayList<Song>();
+    private Song song;
 
     public Playlist(String playlistName){
         this.playlistName = playlistName;
+    }
+
+    public Song getSongByTitle(String songTitle){
+        for (Song song : playlist) {
+           if (song.getSongTitle().equalsIgnoreCase(songTitle)) {
+               return song;
+           }
+        }   
+        return null;
     }
 
     public String getPlaylistName(){

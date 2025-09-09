@@ -3,11 +3,14 @@ package musicPlayer.ui;
 import musicPlayer.models.Library;
 import musicPlayer.models.Playlist;
 import musicPlayer.utils.UserInputs;
+import musicPlayer.player.MusicPlayer;
+import musicPlayer.models.Song;
 
 public class ConsoleUI {
 
     private final UserInputs userInputs;
     private final Library library;
+    private MusicPlayer musicPlayer;
 
     private final String devName = """
                                                         ___          \s
@@ -18,9 +21,10 @@ public class ConsoleUI {
                                              |___/                   \s
             """;
 
-    public ConsoleUI(Library library) {
+    public ConsoleUI(Library library, MusicPlayer musicPlayer) {
         this.userInputs = new UserInputs();
         this.library = library;
+        this.musicPlayer = musicPlayer;
     }
 
     public void displayInitialOptions() {
@@ -65,7 +69,7 @@ public class ConsoleUI {
                 .forEach(System.out::println);
     }
 
-    public void startPlaylistMenu() {
+    public void startPlaylistMenu(Playlist activePlaylist) {
         boolean continueLooping = true;
         while (continueLooping) {
             displayPlaylistOptions();
@@ -77,9 +81,7 @@ public class ConsoleUI {
             } else {
                 switch (inputOption) {
                     case "1":
-                        String playListNameForDisplaySongs = userInputs
-                                .getStringInput("Enter the name of the playlist to display his songs: ");
-                        displayAllSongsInPlaylist(playListNameForDisplaySongs);
+                        displayAllSongsInPlaylist(activePlaylist.getPlaylistName());
                         break;
                     case "2":
                         System.out.println("Add song to playlist - Not implemented yet");
@@ -88,7 +90,9 @@ public class ConsoleUI {
                         System.out.println("Remove song from playlist - Not implemented yet");
                         break;
                     case "4":
-                        System.out.println("Play a song from the playlist - Not implemented yet");
+                        String songNameToPlay = userInputs.getStringInput("Enter the name of the sound to play: ");
+                        Song songToPlay = activePlaylist.getSongByTitle(songNameToPlay);
+                        this.musicPlayer.playSong(songToPlay);
                         break;
                     default:
                         System.out.println("Invalid option");
@@ -119,11 +123,9 @@ public class ConsoleUI {
                         System.out.println("Playlist " + playListNameForRemoval + " removed from library");
                         break;
                     case "3":
-                        String playListNameForDisplaySongs = userInputs.getStringInput("Enter the name of the playlist to display his songs: ");
-                        displayAllSongsInPlaylist(playListNameForDisplaySongs);
-                        break;
-                    case "6":
-                        startPlaylistMenu();
+                        String playListNameForDisplaySongs = userInputs.getStringInput("Enter the name of the playlist to display his songs: "); 
+                        Playlist selectedPlaylist = this.library.getPlaylistByName(playListNameForDisplaySongs);
+                        startPlaylistMenu(selectedPlaylist);
                         break;
                     default:
                         System.out.println("Invalid option");

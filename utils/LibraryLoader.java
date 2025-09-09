@@ -57,7 +57,8 @@ public class LibraryLoader {
                         file.getTag().getFirst("TPE1"),
                         file.getTag().getFirst("TALB"),
                         file.getTag().getFirst("TCON"),
-                        audioHeader.getTrackLength()
+                        audioHeader.getTrackLength(),
+                        mp3Path.toString()
                 ));
 
             } catch (Exception e) {
