@@ -14,4 +14,9 @@ public class UserInputs {
         System.out.print(inputMessage);
         return scanner.nextLine();
     }
+
+    public void waitForEnterInput(){
+        System.out.print("\n" + "Press Enter to continue: ");
+        scanner.nextLine();
+    }
 }

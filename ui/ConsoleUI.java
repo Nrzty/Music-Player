@@ -11,15 +11,7 @@ public class ConsoleUI {
     private final UserInputs userInputs;
     private final Library library;
     private MusicPlayer musicPlayer;
-
-    private final String devName = """
-                                                        ___          \s
-                          /\\ \\ \\_ __ ___| |_ _   _     /   \\_____   __
-                         /  \\/ / '__|_  / __| | | |   / /\\ / _ \\ \\ / /
-                        / /\\  /| |   / /| |_| |_| |  / /_//  __/\\ V /\s
-                        \\_\\ \\/ |_|  /___|\\__|\\__, | /___,' \\___| \\_/ \s
-                                             |___/                   \s
-            """;
+    private Playlist activePlaylist;
 
     public ConsoleUI(Library library, MusicPlayer musicPlayer) {
         this.userInputs = new UserInputs();
@@ -27,52 +19,73 @@ public class ConsoleUI {
         this.musicPlayer = musicPlayer;
     }
 
+    public void clearDisplay(){
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
+
     public void displayInitialOptions() {
         System.out.println(
-                """
-                        """ + devName + """
-                        --------------------------------------------
+                """     
+                        Initial Menu  \n""" + """
                         1. List all playlists
                         2. Remove a specified playlist
                         3. Select a playlist
                         4. Exit
-                        --------------------------------------------
                         """);
     }
 
-    public void displayPlaylistOptions() {
+    public void displayPlaylistOptions(String playlistName) {
         System.out.println(
                 """
-                        """ + devName + """
-                        --------------------------------------------
+                        Selected Playlist -> [""" + playlistName + "]\n" + """ 
                         1. List all songs in the playlist
                         2. Add a song to the playlist
                         3. Remove a song from the playlist
                         4. Play a song from the playlist
                         5. Back to main menu
-                        --------------------------------------------
                         """);
     }
 
     public void displayAllSongsInPlaylist(String playlistName) {
         library.getAllSongsInAPlaylist(playlistName)
-                .stream()
                 .forEach(
-                        song -> {
-                            System.out.println("Song Title: " + song.getSongTitle());
-                        });
+                        song -> System.out.println("Song Title: " + song.getSongTitle()));
     }
 
     public void displayAllPlaylistsInLibrary() {
+        System.out.println("""
+                All playlists in library:\s
+                """);
         library.getAllPlaylistsInLibrary()
-                .stream()
                 .forEach(System.out::println);
+    }
+
+    public void selectAPlaylist(){
+        String playListNameForDisplaySongs = userInputs.getStringInput("\nEnter the name of the playlist to display his songs: ");
+        Playlist selectedPlaylist = this.library.getPlaylistByName(playListNameForDisplaySongs);
+        startPlaylistMenu(selectedPlaylist);
+    }
+
+    public void removeAPlaylist(){
+        System.out.println("All playlists found for removal: ");
+        displayAllPlaylistsInLibrary();
+        String playListNameForRemoval = userInputs.getStringInput("Enter the name of the playlist to remove: ");
+        this.library.removePlaylistFromLibrary(playListNameForRemoval);
+        System.out.println("Playlist " + playListNameForRemoval + " removed from library");
+    }
+
+    public void playASongByName(){
+        String songNameToPlay = userInputs.getStringInput("Enter the name of the sound to play: ");
+        Song songToPlay = activePlaylist.getSongByTitle(songNameToPlay);
+        this.musicPlayer.playSong(songToPlay);
     }
 
     public void startPlaylistMenu(Playlist activePlaylist) {
         boolean continueLooping = true;
         while (continueLooping) {
-            displayPlaylistOptions();
+            clearDisplay();
+            displayPlaylistOptions(activePlaylist.getPlaylistName());
             String inputOption = userInputs.getStringInput("Select an option: ");
 
             if (inputOption.equals("5")) {
@@ -90,9 +103,7 @@ public class ConsoleUI {
                         System.out.println("Remove song from playlist - Not implemented yet");
                         break;
                     case "4":
-                        String songNameToPlay = userInputs.getStringInput("Enter the name of the sound to play: ");
-                        Song songToPlay = activePlaylist.getSongByTitle(songNameToPlay);
-                        this.musicPlayer.playSong(songToPlay);
+                        playASongByName();
                         break;
                     default:
                         System.out.println("Invalid option");
@@ -104,6 +115,7 @@ public class ConsoleUI {
     public void startInicialMenu() {
         boolean continueLooping = true;
         while (continueLooping) {
+            clearDisplay();
             displayInitialOptions();
             String inputOption = userInputs.getStringInput("Select an option: ");
 
@@ -115,18 +127,15 @@ public class ConsoleUI {
                 switch (inputOption) {
                     case "1":
                         displayAllPlaylistsInLibrary();
+                        userInputs.waitForEnterInput();
                         break;
                     case "2":
-                        String playListNameForRemoval = userInputs.getStringInput("Enter the name of the playlist to remove: ");
-                        System.out.println("All playlists found for removal: ");
-                        displayAllPlaylistsInLibrary();
-                        this.library.removePlaylistFromLibrary(playListNameForRemoval);
-                        System.out.println("Playlist " + playListNameForRemoval + " removed from library");
+                        removeAPlaylist();
                         break;
                     case "3":
-                        String playListNameForDisplaySongs = userInputs.getStringInput("Enter the name of the playlist to display his songs: "); 
-                        Playlist selectedPlaylist = this.library.getPlaylistByName(playListNameForDisplaySongs);
-                        startPlaylistMenu(selectedPlaylist);
+                        displayAllPlaylistsInLibrary();
+                        selectAPlaylist();
+                        userInputs.waitForEnterInput();
                         break;
                     default:
                         System.out.println("Invalid option");

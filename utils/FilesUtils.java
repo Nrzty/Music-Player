@@ -90,7 +90,7 @@ public class FilesUtils {
     public List<Path> readAllMP3FilesOnAFolder(String folderPath){
         try(Stream<Path> paths = Files.walk(Paths.get(folderPath))){
             return paths
-                    .peek(path -> System.out.println("Encontrado: " + path))
+                    .peek(path -> System.out.println("Found: " + path))
                     .filter(Files::isRegularFile)
                     .filter(path -> path.toString().toLowerCase().endsWith(".mp3"))
                     .collect(Collectors.toList());
