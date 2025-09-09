@@ -10,7 +10,6 @@ A simple, console-based music player application built with Java and Maven. This
 ## Contents
 
 * [Features](#-features)
-* [Roadmap](#-roadmap)
 * [Dependencies](#-dependencies)
 * [Getting Started](#-getting-started)
     * [Prerequisites](#prerequisites)
