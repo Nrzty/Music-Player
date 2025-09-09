@@ -8,7 +8,7 @@ import musicPlayer.player.MusicPlayer;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        JFXPanel fxPanel = new JFXPanel();
+        new JFXPanel();
         LibraryLoader libraryLoader = new LibraryLoader();
         
         MusicPlayer musicPlayer = new MusicPlayer();

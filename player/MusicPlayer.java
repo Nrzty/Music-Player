@@ -18,11 +18,11 @@ public class MusicPlayer{
     public void playSong(Song songToPlay){
         if (songToPlay == null) {
             System.err.println("Song cannot be null");
-	}        
+	    }
         
-	if (mediaPlayer != null){
+	    if (mediaPlayer != null){
             stop(); 
-        }          
+        }
     
         FilesUtils filesUtils = new FilesUtils();
         String uriString = filesUtils.convertAStringToURI(songToPlay.getFilePath());
@@ -35,23 +35,27 @@ public class MusicPlayer{
     }  
     
     public void stop(){
-    
+        if (this.playerStatus == PlayerStatus.PLAYING || this.playerStatus == PlayerStatus.PAUSED) {
+            mediaPlayer.stop();
+            playerStatus = PlayerStatus.STOPPED;
+        }
     }
 
     public void pause(){
-        if (playerStatus == PlayerStatus.PLAYING) {
+        if (this.playerStatus == PlayerStatus.PLAYING) {
+            mediaPlayer.pause();
             playerStatus = PlayerStatus.PAUSED;
         }
     }
 
     public void resume(){
-        if (playerStatus == PlayerStatus.PAUSED) {
+        if (this.playerStatus == PlayerStatus.PAUSED) {
+            mediaPlayer.play();
+            playerStatus = PlayerStatus.PLAYING;
         }
-
-        playerStatus = PlayerStatus.PLAYING;
     }
 
-    public void getStatus(){
-
+    public PlayerStatus getStatus(){
+        return this.playerStatus;
     }
 }

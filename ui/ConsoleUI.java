@@ -110,6 +110,7 @@ public class ConsoleUI {
             if (inputOption.equals("4")) {
                 continueLooping = false;
                 System.out.println("Exiting program...");
+                break;
             } else {
                 switch (inputOption) {
                     case "1":

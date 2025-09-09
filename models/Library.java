@@ -81,7 +81,6 @@ public class Library {
             throw new RuntimeException("Playlist not found in library");
         }
 
-        Playlist playlist = allPlaylists.get(playListName);
-        return playlist;
+        return allPlaylists.get(playListName);
     }
 }
