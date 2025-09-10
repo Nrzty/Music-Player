@@ -1,146 +1,185 @@
 package musicPlayer.ui;
 
+import com.googlecode.lanterna.graphics.TextGraphics;
+import com.googlecode.lanterna.input.KeyStroke;
+import com.googlecode.lanterna.input.KeyType;
+import com.googlecode.lanterna.screen.Screen;
+import com.googlecode.lanterna.screen.TerminalScreen;
+import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
+import com.googlecode.lanterna.terminal.Terminal;
 import musicPlayer.models.Library;
 import musicPlayer.models.Playlist;
 import musicPlayer.utils.UserInputs;
 import musicPlayer.player.MusicPlayer;
 import musicPlayer.models.Song;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Set;
+
 public class ConsoleUI {
 
+    private int selectedMenuItem = 0;
+    private int selectedPlaylistMenuItem = 0;
+
     private final UserInputs userInputs;
+
     private final Library library;
     private MusicPlayer musicPlayer;
     private Playlist activePlaylist;
+
+    private DefaultTerminalFactory defaultTerminalFactory;
+    private Terminal terminal;
+    private Screen screen;
+    private TextGraphics graphics;
+
+    private UIView currentView = UIView.MAIN_MENU;
+
+    private final List<String> mainMenuItens = List.of("List all playlits", "Remove a Playlist", "Select a playlist", "Exit");
+
+    private final List<String> playlistMenuItens = List.of("List all songs in the playlist", "Add a song to the playlist", "Remove a song from the playlist", "Play a song from the playlist", "Back to main menu");
 
     public ConsoleUI(Library library, MusicPlayer musicPlayer) {
         this.userInputs = new UserInputs();
         this.library = library;
         this.musicPlayer = musicPlayer;
+
+        try {
+            this.terminal = new DefaultTerminalFactory().createTerminal();
+            this.screen = new TerminalScreen(this.terminal);
+            this.screen.startScreen();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public void clearDisplay(){
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
+    private void drawCurrentView() throws IOException {
+        switch (currentView) {
+            case MAIN_MENU -> displayMainMenu();
+            case PLAYLIST_MENU -> displayPlaylistMenu();
+            case PLAYLIST_LIST_VIEW -> displayAllPlaylists();
+        }
     }
 
-    public void displayInitialOptions() {
-        System.out.println(
-                """     
-                        Initial Menu  \n""" + """
-                        1. List all playlists
-                        2. Remove a specified playlist
-                        3. Select a playlist
-                        4. Exit
-                        """);
+    public void closeTerminal() throws IOException {
+        this.screen.stopScreen();
     }
 
-    public void displayPlaylistOptions(String playlistName) {
-        System.out.println(
-                """
-                        Selected Playlist -> [""" + playlistName + "]\n" + """ 
-                        1. List all songs in the playlist
-                        2. Add a song to the playlist
-                        3. Remove a song from the playlist
-                        4. Play a song from the playlist
-                        5. Back to main menu
-                        """);
-    }
-
-    public void displayAllSongsInPlaylist(String playlistName) {
-        library.getAllSongsInAPlaylist(playlistName)
-                .forEach(
-                        song -> System.out.println("Song Title: " + song.getSongTitle()));
-    }
-
-    public void displayAllPlaylistsInLibrary() {
-        System.out.println("""
-                All playlists in library:\s
-                """);
-        library.getAllPlaylistsInLibrary()
-                .forEach(System.out::println);
-    }
-
-    public void selectAPlaylist(){
-        String playListNameForDisplaySongs = userInputs.getStringInput("\nEnter the name of the playlist to display his songs: ");
-        Playlist selectedPlaylist = this.library.getPlaylistByName(playListNameForDisplaySongs);
-        startPlaylistMenu(selectedPlaylist);
-    }
-
-    public void removeAPlaylist(){
-        System.out.println("All playlists found for removal: ");
-        displayAllPlaylistsInLibrary();
-        String playListNameForRemoval = userInputs.getStringInput("Enter the name of the playlist to remove: ");
-        this.library.removePlaylistFromLibrary(playListNameForRemoval);
-        System.out.println("Playlist " + playListNameForRemoval + " removed from library");
-    }
-
-    public void playASongByName(){
-        String songNameToPlay = userInputs.getStringInput("Enter the name of the sound to play: ");
-        Song songToPlay = activePlaylist.getSongByTitle(songNameToPlay);
-        this.musicPlayer.playSong(songToPlay);
-    }
-
-    public void startPlaylistMenu(Playlist activePlaylist) {
-        boolean continueLooping = true;
-        while (continueLooping) {
-            clearDisplay();
-            displayPlaylistOptions(activePlaylist.getPlaylistName());
-            String inputOption = userInputs.getStringInput("Select an option: ");
-
-            if (inputOption.equals("5")) {
-                continueLooping = false;
-                System.out.println("Returning to main menu...");
+    private void arrowSelectionToMenu(List<String> itensList, int meuItem) {
+        for (int i = 0; i < itensList.size(); i++) {
+            if (i == meuItem) {
+                graphics.putString(0, 1 + i, i + "-> " + itensList.get(i));
             } else {
-                switch (inputOption) {
-                    case "1":
-                        displayAllSongsInPlaylist(activePlaylist.getPlaylistName());
-                        break;
-                    case "2":
-                        System.out.println("Add song to playlist - Not implemented yet");
-                        break;
-                    case "3":
-                        System.out.println("Remove song from playlist - Not implemented yet");
-                        break;
-                    case "4":
-                        playASongByName();
-                        break;
-                    default:
-                        System.out.println("Invalid option");
-                }
+                graphics.putString(0, 1 + i, i + "  " + itensList.get(i));
             }
         }
     }
 
-    public void startInicialMenu() {
+    private void displayMainMenu() throws IOException {
+        this.screen.clear();
+        this.graphics = screen.newTextGraphics();
+        graphics.putString(0, 0, "Main Menu");
+
+        arrowSelectionToMenu(mainMenuItens, selectedMenuItem);
+    }
+
+    private void displayPlaylistMenu() {
+        this.screen.clear();
+        this.graphics = screen.newTextGraphics();
+        graphics.putString(0, 0, "Selected Playlist Main Menu");
+
+        arrowSelectionToMenu(playlistMenuItens, selectedPlaylistMenuItem);
+    }
+
+    private void displayAllPlaylists() {
+        this.screen.clear();
+        this.graphics = screen.newTextGraphics();
+        graphics.putString(0, 0, "These are all your playlists:");
+
+        Set<String> playListNames = library.getAllPlaylistsInLibrary();
+
+        int index = 1;
+        for (String playlistName : playListNames) {
+            index++;
+            graphics.putString(0, index, (index - 1) + " - " + playlistName);
+        }
+
+        graphics.putString(0, index + 2, "Press 'BackSpace' to go back to menu.");
+    }
+
+    public void startInitialMenu() throws IOException {
         boolean continueLooping = true;
         while (continueLooping) {
-            clearDisplay();
-            displayInitialOptions();
-            String inputOption = userInputs.getStringInput("Select an option: ");
+            drawCurrentView();
+            this.screen.refresh();
+            KeyStroke key = screen.readInput();
+            continueLooping = processInputs(key);
+        }
+    }
 
-            if (inputOption.equals("4")) {
-                continueLooping = false;
-                System.out.println("Exiting program...");
+    private int navigateThroughMenu(int currentSelection, int listSize, KeyType key) {
+        if (key == KeyType.ArrowUp) {
+            currentSelection--;
+            if (currentSelection < 0) {
+                currentSelection = 0;
+            }
+        } else if (key == KeyType.ArrowDown) {
+            currentSelection++;
+            if (currentSelection >= listSize) {
+                currentSelection = listSize - 1;
+            }
+        }
+        return currentSelection;
+    }
+
+    private boolean processInputs(KeyStroke key) throws IOException {
+        switch (currentView) {
+            case MAIN_MENU:
+                if (key.getKeyType() == KeyType.ArrowUp || key.getKeyType() == KeyType.ArrowDown) {
+                    this.selectedMenuItem = navigateThroughMenu(this.selectedMenuItem, this.mainMenuItens.size(), key.getKeyType());
+                } else if (key.getKeyType().equals(KeyType.Enter)) {
+                    switch (selectedMenuItem) {
+                        case 0:
+                            this.currentView = UIView.PLAYLIST_LIST_VIEW;
+                            break;
+                        case 1:
+
+                            break;
+                        case 2:
+                            this.currentView = UIView.PLAYLIST_MENU;
+                            break;
+                        case 3:
+                            closeTerminal();
+                            return false;
+                    }
+                }
                 break;
-            } else {
-                switch (inputOption) {
-                    case "1":
-                        displayAllPlaylistsInLibrary();
-                        userInputs.waitForEnterInput();
-                        break;
-                    case "2":
-                        removeAPlaylist();
-                        break;
-                    case "3":
-                        displayAllPlaylistsInLibrary();
-                        selectAPlaylist();
-                        userInputs.waitForEnterInput();
-                        break;
-                    default:
-                        System.out.println("Invalid option");
+
+            case PLAYLIST_LIST_VIEW:
+                if (key.getKeyType().equals(KeyType.Backspace)) {
+                    this.currentView = UIView.MAIN_MENU;
                 }
-            }
+                break;
+
+            case PLAYLIST_MENU:
+                if (key.getKeyType() == KeyType.ArrowUp || key.getKeyType() == KeyType.ArrowDown) {
+                    this.selectedPlaylistMenuItem = navigateThroughMenu(this.selectedPlaylistMenuItem, this.playlistMenuItens.size(), key.getKeyType());
+                }
+
+                switch (selectedPlaylistMenuItem){
+                    case 0:
+
+                        break;
+                    case 4:
+                        this.currentView = UIView.MAIN_MENU;
+                        break;
+                }
+
+                if (key.getKeyType() == KeyType.Backspace){
+                    this.currentView = UIView.MAIN_MENU;
+                }
+                break;
         }
+        return true;
     }
 }

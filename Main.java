@@ -19,6 +19,6 @@ public class Main {
 
         Library library = libraryLoader.loadAllPlaylistsFound();
         ConsoleUI consoleUI = new ConsoleUI(library, musicPlayer);
-        consoleUI.startInicialMenu();
+        consoleUI.startInitialMenu();
     }
 }
