@@ -58,4 +58,26 @@ public class MusicPlayer{
     public PlayerStatus getStatus(){
         return this.playerStatus;
     }
+
+    public String getCurrentlyPlayingSong(){
+        if (this.playerStatus == PlayerStatus.PLAYING) {
+            return this.currentSong.getSongTitle();
+        }
+        return "There's no song playing right now";
+    }
+
+    public String getSongArtist(){
+        if (this.playerStatus == PlayerStatus.PLAYING){
+            return this.currentSong.getSongArtist();
+        }
+        return "There's no song playing right now";
+    }
+
+    public double getTotalDurationTime(){
+        return this.mediaPlayer.getTotalDuration().toSeconds();
+    }
+
+    public double getActualDurationTime(){
+        return this.mediaPlayer.getCurrentTime().toSeconds();
+    }
 }

@@ -6,6 +6,8 @@ import musicPlayer.models.Song;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.mp3.MP3AudioHeader;
 import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.tag.datatype.Artwork;
+
 import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -49,6 +51,15 @@ public class LibraryLoader {
         for (Path mp3Path : mp3Files) {
             try {
                 MP3File file = (MP3File) AudioFileIO.read(mp3Path.toFile());
+                Artwork artwork = file.getTag().getFirstArtwork();
+
+                byte[] imageData;
+
+                if (artwork != null) {
+                    imageData = artwork.getBinaryData();
+                } else {
+                    imageData = null;
+                }
 
                 MP3AudioHeader audioHeader = file.getMP3AudioHeader();
 
@@ -58,7 +69,8 @@ public class LibraryLoader {
                         file.getTag().getFirst("TALB"),
                         file.getTag().getFirst("TCON"),
                         audioHeader.getTrackLength(),
-                        mp3Path.toString()
+                        mp3Path.toString(),
+                        imageData
                 ));
 
             } catch (Exception e) {

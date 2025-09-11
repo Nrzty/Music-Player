@@ -3,5 +3,8 @@ package musicPlayer.ui;
 public enum UIView {
     MAIN_MENU,
     PLAYLIST_LIST_VIEW,
-    PLAYLIST_MENU
+    PLAYLIST_MENU,
+    SELECTING_A_PLAYLIST,
+    SELECTING_A_SONG_TO_PLAY,
+    PLAYING_SELECTED_SONG
 }

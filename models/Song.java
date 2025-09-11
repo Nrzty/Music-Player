@@ -9,15 +9,18 @@ public class Song {
 
     int duration;
 
+    private byte[] albumArtData;
+
     private String filePath;
 
-    public Song(String title, String artist, String album, String musicalGenre, int duration, String filePath) {
+    public Song(String title, String artist, String album, String musicalGenre, int duration, String filePath, byte[] albumArtData) {
         this.title = title;
         this.artist = artist;
         this.album = album;
         this.musicalGenre = musicalGenre;
         this.duration = duration;
         this.filePath = filePath;
+        this.albumArtData = albumArtData;
     }
 
     public String getSongTitle(){
@@ -26,6 +29,20 @@ public class Song {
 
     public String getFilePath(){
         return this.filePath;
+    }
+
+    public String getSongArtist(){
+        return this.artist;
+    }
+
+    public byte[] getAlbumArtData(){
+        return this.albumArtData;
+    }
+
+    public String getSongTimeFormated(){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(duration / 60).append(":").append(duration % 60);
+        return stringBuilder.toString();
     }
 
     @Override
