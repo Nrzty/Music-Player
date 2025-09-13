@@ -4,9 +4,9 @@ import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.Screen;
-import musicPlayer.models.Playlist;
 import musicPlayer.ui.IView;
 import musicPlayer.ui.UIView;
+import musicPlayer.ui.UiContext;
 
 import java.util.List;
 
@@ -14,18 +14,18 @@ public class Menu implements IView {
 
     private int selectedPlaylistMenuItem = 0;
 
-    private Playlist activePlaylist;
-
     private final List<String> playlistMenuItens = List.of("List Songs", "Play a Song", "Back to Main Menu");
 
-    // TODO PASSAR LIBRARY OU PLAYLIST PRA PEGAR O NOME DA PLAYLIST SELECIONADA
-    public Menu() {
+    private final UiContext uiContext;
 
+    public Menu(UiContext uiContext) {
+        this.uiContext = uiContext;
     }
 
     @Override
     public void draw(Screen screen, TextGraphics graphics) {
-        graphics.putString(2,1, "Selected Playlist: " + this.activePlaylist.getPlaylistName());
+        String playlistName = this.uiContext.getActivePlaylist().getPlaylistName();
+        graphics.putString(2,1, "Selected Playlist: " + playlistName);
         drawSelectionList(graphics, playlistMenuItens, selectedPlaylistMenuItem, 2, 3);
     }
 

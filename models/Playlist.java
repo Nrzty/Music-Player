@@ -22,6 +22,10 @@ public class Playlist {
         return null;
     }
 
+    public List<Song> getAllSongsOnPlaylist() {
+        return playlist;
+    }
+
     public String getPlaylistName(){
         return this.playlistName;
     }

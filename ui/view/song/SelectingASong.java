@@ -1,4 +1,4 @@
-package musicPlayer.ui.song;
+package musicPlayer.ui.view.song;
 
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
@@ -12,7 +12,6 @@ import musicPlayer.ui.UIView;
 import musicPlayer.ui.UiContext;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class SelectingASong implements IView {
@@ -20,26 +19,42 @@ public class SelectingASong implements IView {
     private int selectedSong;
     private Library library;
     private UiContext uiContext;
-    private List<Song> songs;
     private MusicPlayer musicPlayer;
+    private List<Song> songs;
 
-    public SelectingASong(UiContext uiContext){
+    public SelectingASong(Library library, MusicPlayer musicPlayer, UiContext uiContext){
+        this.library = library;
+        this.musicPlayer = musicPlayer;
         this.uiContext = uiContext;
-        this.songs = new ArrayList<>(library.getAllSongsInAPlaylist(uiContext.getActivePlaylist().getPlaylistName()));
     }
 
     @Override
     public void draw(Screen screen, TextGraphics graphics) {
+        if (this.songs == null) {
+            this.songs = uiContext.getActivePlaylist().showAllSongs();
+        }
+
         graphics.putString(2, 1, "Select a Song: ");
-        drawSelectionList(graphics, Collections.singletonList(songs.toString()), selectedSong,2,3);
+
+        List<String> songTitles = new ArrayList<>();
+        for (Song song : songs) {
+            songTitles.add(song.getSongTitle());
+        }
+
+        drawSelectionList(graphics, songTitles, selectedSong, 2, 3);
     }
 
     @Override
     public UIView processInput(KeyStroke key) {
+        if (key.getKeyType() == KeyType.Backspace) {
+            return UIView.PLAYLIST_MENU;
+        }
+
         if (key.getKeyType() == KeyType.ArrowUp || key.getKeyType() == KeyType.ArrowDown) {
             this.selectedSong = navigateList(this.selectedSong, songs.size(), key.getKeyType());
         } else if (key.getKeyType() == KeyType.Enter) {
             this.musicPlayer.playSong(songs.get(selectedSong));
+            return UIView.PLAYING_SELECTED_SONG;
         }
         return UIView.SELECTING_A_SONG_TO_PLAY;
     }

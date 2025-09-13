@@ -5,7 +5,6 @@ import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.Screen;
 import musicPlayer.models.Library;
-import musicPlayer.models.Song;
 import musicPlayer.ui.IView;
 import musicPlayer.ui.UIView;
 
@@ -39,8 +38,8 @@ public class ListAllPlaylists implements IView {
     @Override
     public UIView processInput(KeyStroke key) {
         if (key.getKeyType() == KeyType.Backspace) {
-            return UIView.PLAYLIST_MENU;
+            return UIView.MAIN_MENU;
         }
-        return null;
+        return UIView.PLAYLIST_LIST_VIEW;
     }
 }

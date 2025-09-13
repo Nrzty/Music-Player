@@ -9,6 +9,12 @@ import com.googlecode.lanterna.terminal.Terminal;
 import musicPlayer.models.Library;
 import musicPlayer.player.MusicPlayer;
 import musicPlayer.ui.view.mainMenu.MainMenu;
+import musicPlayer.ui.view.playlist.ListAllPlaylists;
+import musicPlayer.ui.view.playlist.Menu;
+import musicPlayer.ui.view.playlist.SelectingAPlaylist;
+import musicPlayer.ui.view.song.ListAllSongs;
+import musicPlayer.ui.view.song.PlayingSong;
+import musicPlayer.ui.view.song.SelectingASong;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -29,7 +35,19 @@ public class ConsoleUI {
         this.uiContext = new UiContext();
 
         views.put(UIView.MAIN_MENU, new MainMenu());
-        // TODO: Adicionar as outras views (PlaylistListView, SongSelectionView, etc.)
+
+        views.put(UIView.PLAYLIST_LIST_VIEW, new ListAllPlaylists(library));
+
+        views.put(UIView.SELECTING_A_PLAYLIST, new SelectingAPlaylist(library, uiContext));
+
+        views.put(UIView.PLAYLIST_MENU, new Menu(uiContext));
+
+        views.put(UIView.SHOWING_ALL_SONGS_ON_PLAYLIST, new ListAllSongs(uiContext));
+
+        views.put(UIView.SELECTING_A_SONG_TO_PLAY, new SelectingASong(library, musicPlayer, uiContext));
+
+        views.put(UIView.PLAYING_SELECTED_SONG, new PlayingSong(musicPlayer));
+
 
         this.currentView = views.get(UIView.MAIN_MENU);
     }
@@ -39,6 +57,13 @@ public class ConsoleUI {
         screen.setCursorPosition(null);
 
         while (true) {
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            }
+
             screen.clear();
             TextGraphics graphics = screen.newTextGraphics();
 

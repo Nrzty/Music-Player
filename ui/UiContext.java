@@ -11,6 +11,6 @@ public class UiContext {
     }
 
     public void setActivePlaylist(Playlist playlist){
-        this.activePlaylist = activePlaylist;
+        this.activePlaylist = playlist;
     }
 }
