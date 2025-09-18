@@ -1,45 +1,34 @@
 # MP3 Music Player
 
-A simple, console-based music player application built with Java and Maven. This application allows you to manage and organize your local music files into playlists.
+A simple project of an MP3 music player made purely in JAVA, made as a personal project to reinforce learning in Data Structures and OOP.
 
 ![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
 ![Maven](https://img.shields.io/badge/apachemaven-C71A36.svg?style=for-the-badge&logo=apachemaven&logoColor=white)
 
----
-
-## Contents
-
-* [Features](#-features)
-* [Dependencies](#-dependencies)
-* [Getting Started](#-getting-started)
-    * [Prerequisites](#prerequisites)
-    * [Installation](#installation)
-    * [Running the Application](#running-the-application)
-* [Configuration](#-configuration)
-* [Project Structure](#-project-structure)
-* [Contributing](#-contributing)
-* [License](#-license)
-
----
-
-## Features
+## Some Project Features
 
 * **Playlist Management**: Create, view, and manage your playlists.
+* **Download Songs**: Download Songs Automatically by terminal.
 * **Song Management**: Add songs to your playlists and view all songs within a specific playlist.
 * **Console-Based UI**: A simple and intuitive command-line interface for easy navigation and use.
 * **Local File System Integration**: Automatically scans your local file system to find and load your music files.
-  
----
-
-## Dependencies
-
-This project has no external dependencies listed in the `pom.xml` file.
 
 ---
+
+## Project Images
+
+![alt text](https://github.com/Nrzty/Music-Player/blob/main/images/Imagem%20colada.png)
+![alt text](https://github.com/Nrzty/Music-Player/blob/main/images/Imagem%20colada%20(2).png)
+![alt text](https://github.com/Nrzty/Music-Player/blob/main/images/Imagem%20colada%20(3).png)
+![alt text](https://github.com/Nrzty/Music-Player/blob/main/images/Imagem%20colada%20(4).png)
 
 ## Getting Started
 
 Follow these instructions to get a copy of the project up and running on your local machine.
+
+## Dependencies
+
+This project has no external dependencies listed in the `pom.xml` file.
 
 ### Prerequisites
 
