@@ -1,62 +1,48 @@
-# MP3 Music Player
+# 🎵 MP3 Music Player
 
-A simple project of an MP3 music player made purely in JAVA, made as a personal project to reinforce learning in Data Structures and OOP.
+A simple MP3 music player made purely in **Java**, developed as a personal project to reinforce knowledge in **Data Structures** and **Object-Oriented Programming (OOP)**.
 
 ![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
 ![Maven](https://img.shields.io/badge/apachemaven-C71A36.svg?style=for-the-badge&logo=apachemaven&logoColor=white)
 
-## Some Project Features
+---
 
-* **Playlist Management**: Create, view, and manage your playlists.
-* **Download Songs**: Download Songs Automatically by terminal.
-* **Song Management**: Add songs to your playlists and view all songs within a specific playlist.
-* **Console-Based UI**: A simple and intuitive command-line interface for easy navigation and use.
-* **Local File System Integration**: Automatically scans your local file system to find and load your music files.
+## 🚀 Features
+
+- 🎼 **Playlist Management** – Create, view, and manage your playlists.
+- ⬇️ **Download Songs** – Automatically download songs via terminal.
+- 📁 **Song Management** – Add songs to playlists and view songs in each one.
+- 💻 **Console-Based UI** – Simple and intuitive command-line interface.
+- 📂 **Local File Integration** – Scans your local file system for music files.
 
 ---
 
-## Project Images
+## 🖼️ Screenshots
 
-![alt text](https://github.com/Nrzty/Music-Player/blob/main/images/Imagem%20colada.png)
-![alt text](https://github.com/Nrzty/Music-Player/blob/main/images/Imagem%20colada%20(2).png)
-![alt text](https://github.com/Nrzty/Music-Player/blob/main/images/Imagem%20colada%20(3).png)
-![alt text](https://github.com/Nrzty/Music-Player/blob/main/images/Imagem%20colada%20(4).png)
+<p float="left">
+  <img src="https://github.com/Nrzty/Music-Player/blob/main/images/Imagem%20colada.png" width="45%" />
+  <img src="https://github.com/Nrzty/Music-Player/blob/main/images/Imagem%20colada%20(2).png" width="45%" />
+  <br/>
+  <img src="https://github.com/Nrzty/Music-Player/blob/main/images/Imagem%20colada%20(3).png" width="45%" />
+  <img src="https://github.com/Nrzty/Music-Player/blob/main/images/Imagem%20colada%20(4).png" width="45%" />
+</p>
 
-## Getting Started
+---
 
-Follow these instructions to get a copy of the project up and running on your local machine.
+## 🛠 Getting Started
 
-## Dependencies
+### 📦 Prerequisites
 
-This project has no external dependencies listed in the `pom.xml` file.
+- **Java JDK 17 or higher** – The project uses Java 17.
+- **Apache Maven** – For building and managing dependencies.
 
-### Prerequisites
+### 🔧 Installation
 
-* **Java Development Kit (JDK) 17 or higher**: The project is configured to use Java 17.
-* **Apache Maven**: Used for building and managing the project.
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/nrzty/music-player.git
 
-### Installation
-
-1.  **Clone the repository:**
-    ```bash
-    git clone [https://github.com/nrzty/music-player.git](https://github.com/nrzty/music-player.git)
-    ```
-2.  **Navigate to the project directory:**
-    ```bash
-    cd music-player
-    ```
-3.  **Build the project and install dependencies:**
-    ```bash mvn clean install ```
-
-### Running the Application
-
-Once the project is built, you can run the application using the following command:
-
-```bash
-mvn exec:java
-```
-
-## ⚙Configuration
+## ⚙ Configuration
 
 The application loads your music from a directory specified in a `config.properties` file.
 
@@ -74,22 +60,3 @@ The application loads your music from a directory specified in a `config.propert
     ```
 
 If the `config.properties` file is not found, the application will default to `~/MusicPlayerData/songs/`.
-
----
-
-## Project Structure
-
-The project is organized into the following packages:
-
-* **`musicPlayer.models`**: Contains the core data models for the application.
-    * `Song.java`: Represents a single song with properties like title, artist, album, genre, and duration.
-    * `Playlist.java`: Represents a playlist, which is a collection of `Song` objects.
-    * `Library.java`: Represents the music library, which is a collection of `Playlist` objects.
-* **`musicPlayer.ui`**: Contains the user interface classes.
-    * `ConsoleUI.java`: Handles all console input and output, providing a text-based interface for the user.
-* **`musicPlayer.utils`**: Contains utility classes that provide helper functions to the rest of the application.
-    * `FilesUtils.java`: Handles file system operations, such as creating directories and reading files.
-    * `LibraryLoader.java`: Responsible for loading music files from the file system and creating the `Library` object.
-    * `UserInputs.java`: A simple utility for capturing user input from the console.
-
-
