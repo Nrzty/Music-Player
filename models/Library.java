@@ -65,10 +65,6 @@ public class Library {
     }
 
     public Set<String> getAllPlaylistsInLibrary(){
-        if (allPlaylists.isEmpty()){
-            throw new RuntimeException("No playlists in library");
-        }
-
         return allPlaylists.keySet();
     }
 

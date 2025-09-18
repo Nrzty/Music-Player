@@ -45,6 +45,8 @@ public class SelectingAPlaylist implements IView {
             uiContext.setActivePlaylist(selectedPlaylist);
 
             return UIView.PLAYLIST_MENU;
+        } else if (key.getKeyType() == KeyType.Backspace) {
+            return UIView.MAIN_MENU;
         }
         return UIView.SELECTING_A_PLAYLIST;
     }

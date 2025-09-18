@@ -29,10 +29,10 @@ public class ListAllPlaylists implements IView {
         List<String> playlistsNames = getOrderedPlaylistsName();
 
         for (int i = 0; i < playlistsNames.size(); i++) {
-            graphics.putString(2, 2 + i, playlistsNames.get(i));
+            graphics.putString(2, 3 + i, "- " + playlistsNames.get(i));
         }
 
-        graphics.putString(2, 3 + playlistsNames.size() + 1,"Press 'Backspace' to return.");
+        graphics.putString(2, 4 + playlistsNames.size() + 1,"Press 'Backspace' to return.");
     }
 
     @Override

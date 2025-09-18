@@ -12,7 +12,7 @@ import java.util.List;
 public class MainMenu implements IView {
 
     private int selectedMenuItem = 0;
-    private final List<String> mainMenuItens = List.of("Show Playlists", "Select Playlist", "Exit");
+    private final List<String> mainMenuItens = List.of("Show Playlists", "Select Playlist", "Create a Playlist", "Exit");
 
     @Override
     public void draw(Screen screen, TextGraphics graphics){
@@ -31,6 +31,8 @@ public class MainMenu implements IView {
                 case 1:
                     return UIView.SELECTING_A_PLAYLIST;
                 case 2:
+                    return UIView.CREATING_A_PLAYLIST;
+                case 3:
                     return null;
             }
         }

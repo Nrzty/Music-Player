@@ -8,9 +8,11 @@ public class Playlist {
     private String playlistName;
     public ArrayList<Song> playlist = new ArrayList<Song>();
     private Song song;
+    private String folderPath;
 
-    public Playlist(String playlistName){
+    public Playlist(String playlistName, String folderPath){
         this.playlistName = playlistName;
+        this.folderPath = folderPath;
     }
 
     public Song getSongByTitle(String songTitle){
@@ -20,6 +22,10 @@ public class Playlist {
            }
         }   
         return null;
+    }
+
+    public String getFolderPath(){
+        return this.folderPath;
     }
 
     public List<Song> getAllSongsOnPlaylist() {

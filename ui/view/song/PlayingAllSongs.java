@@ -7,20 +7,26 @@ import com.googlecode.lanterna.screen.Screen;
 import musicPlayer.player.MusicPlayer;
 import musicPlayer.ui.IView;
 import musicPlayer.ui.UIView;
+import musicPlayer.ui.UiContext;
+import musicPlayer.utils.LibraryLoader;
 
-public class PlayingSong implements IView {
+import java.io.IOException;
+
+public class PlayingAllSongs implements IView {
 
     private MusicPlayer musicPlayer;
+    private UiContext uiContext;
 
-    public PlayingSong(MusicPlayer musicPlayer) {
+    public PlayingAllSongs(MusicPlayer musicPlayer, UiContext uiContext) {
         this.musicPlayer = musicPlayer;
+        this.uiContext = uiContext;
     }
 
     @Override
-    public void draw(Screen screen, TextGraphics graphics) {
-        graphics.putString(18, 2, "Now Playing");
+    public void draw(Screen screen, TextGraphics graphics) throws IOException, InterruptedException {
 
-        graphics.putString(10,4 ,"Title: "  + musicPlayer.getCurrentlyPlayingSong());
+        graphics.putString(18,2,"Now Playing");
+        graphics.putString(10, 4, "Title: " + musicPlayer.getCurrentlyPlayingSong());
 
         String artist = musicPlayer.getSongArtist();
         String formatArtist = artist.length() > 20 ? artist.substring(0, 17) + "..." : artist;

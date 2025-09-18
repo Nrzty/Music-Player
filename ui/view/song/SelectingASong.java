@@ -30,9 +30,7 @@ public class SelectingASong implements IView {
 
     @Override
     public void draw(Screen screen, TextGraphics graphics) {
-        if (this.songs == null) {
-            this.songs = uiContext.getActivePlaylist().showAllSongs();
-        }
+        playlistToDraw();
 
         graphics.putString(2, 1, "Select a Song: ");
 
@@ -73,5 +71,13 @@ public class SelectingASong implements IView {
             String prefix = (i == selectedIndex) ? "-> " : "   ";
             graphics.putString(x, y + i, prefix + items.get(i));
         }
+    }
+    
+    private void  playlistToDraw(){
+        if (this.songs == null) {
+            this.songs = uiContext.getActivePlaylist().showAllSongs();
+        }
+
+        this.songs = uiContext.getActivePlaylist().showAllSongs();
     }
 }

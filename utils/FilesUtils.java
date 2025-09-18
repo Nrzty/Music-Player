@@ -10,8 +10,6 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.Properties;
 import java.lang.Exception;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 public class FilesUtils {
 
@@ -20,6 +18,17 @@ public class FilesUtils {
     public FilesUtils(){
         this.playlistFolderPath = loadPlaylistPathFromConfig();
         createBaseDirectoryIfNotExists();
+    }
+
+    public void createAPlaylistDirectory(String playlistName){
+        Path fullPath = Paths.get(playlistFolderPath, playlistName);
+
+        try {
+            Files.createDirectories(fullPath);
+            System.out.println("Playlist Successfully Created");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public String convertAStringToURI(String textToConvert){
@@ -90,7 +99,6 @@ public class FilesUtils {
     public List<Path> readAllMP3FilesOnAFolder(String folderPath){
         try(Stream<Path> paths = Files.walk(Paths.get(folderPath))){
             return paths
-                    .peek(path -> System.out.println("Found: " + path))
                     .filter(Files::isRegularFile)
                     .filter(path -> path.toString().toLowerCase().endsWith(".mp3"))
                     .collect(Collectors.toList());

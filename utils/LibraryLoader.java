@@ -27,10 +27,12 @@ public class LibraryLoader {
 
         for (Path playlistFolder : playlistFolders) {
             String playlistName = playlistFolder.getFileName().toString();
-            Playlist actualPlaylist = new Playlist(playlistName);
+            String playlistPath = playlistFolder.toString();
+
+            Playlist actualPlaylist = new Playlist(playlistName, playlistPath);
 
             List<Song> songs = this.loadSongsFound(playlistFolder.toString());
-
+            System.out.println();
             for (Song song : songs){
                 actualPlaylist.addSong(song);
             }
@@ -51,15 +53,6 @@ public class LibraryLoader {
         for (Path mp3Path : mp3Files) {
             try {
                 MP3File file = (MP3File) AudioFileIO.read(mp3Path.toFile());
-                Artwork artwork = file.getTag().getFirstArtwork();
-
-                byte[] imageData;
-
-                if (artwork != null) {
-                    imageData = artwork.getBinaryData();
-                } else {
-                    imageData = null;
-                }
 
                 MP3AudioHeader audioHeader = file.getMP3AudioHeader();
 
@@ -69,8 +62,7 @@ public class LibraryLoader {
                         file.getTag().getFirst("TALB"),
                         file.getTag().getFirst("TCON"),
                         audioHeader.getTrackLength(),
-                        mp3Path.toString(),
-                        imageData
+                        mp3Path.toString()
                 ));
 
             } catch (Exception e) {

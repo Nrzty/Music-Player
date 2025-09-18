@@ -4,6 +4,7 @@ import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.Screen;
+import musicPlayer.player.MusicPlayer;
 import musicPlayer.ui.IView;
 import musicPlayer.ui.UIView;
 import musicPlayer.ui.UiContext;
@@ -14,12 +15,14 @@ public class Menu implements IView {
 
     private int selectedPlaylistMenuItem = 0;
 
-    private final List<String> playlistMenuItens = List.of("List Songs", "Play a Song", "Back to Main Menu");
+    private final List<String> playlistMenuItens = List.of("Download Song By Name", "List Songs", "Play All Songs on Playlist", "Play a Song", "Back to Main Menu");
 
     private final UiContext uiContext;
+    private final MusicPlayer musicPlayer;
 
-    public Menu(UiContext uiContext) {
+    public Menu(UiContext uiContext, MusicPlayer musicPlayer) {
         this.uiContext = uiContext;
+        this.musicPlayer = musicPlayer;
     }
 
     @Override
@@ -36,11 +39,16 @@ public class Menu implements IView {
         } else if (key.getKeyType() == KeyType.Enter) {
             switch (selectedPlaylistMenuItem) {
                 case 0:
-                    return UIView.SHOWING_ALL_SONGS_ON_PLAYLIST;
+                    return UIView.DOWNLOADING_MUSIC;
                 case 1:
-                    return UIView.SELECTING_A_SONG_TO_PLAY;
+                    return UIView.SHOWING_ALL_SONGS_ON_PLAYLIST;
                 case 2:
-                    return null;
+                    musicPlayer.playAllSongsOnPlaylist(uiContext);
+                    return UIView.PLAYING_ALL_SONGS_ON_PLAYLIST;
+                case 3:
+                    return UIView.SELECTING_A_SONG_TO_PLAY;
+                case 4:
+                    return UIView.MAIN_MENU;
             }
         }
         return UIView.PLAYLIST_MENU;
